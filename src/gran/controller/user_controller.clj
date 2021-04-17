@@ -1,39 +1,28 @@
 (ns gran.controller.user-controller
   (:require [clojure.pprint :as pp]
-            [clojure.string :as str]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [gran.services.user-service :as user-srv]))
 
-(def users-collection (atom []))
-
-(defn add-user
-  "Add user fn"
-  [firstname surname]
-  (swap! users-collection conj {:firstname (str/capitalize firstname)
-                                :surname (str/capitalize surname)}))
-
-(add-user "Functional" "Humnan")
-(add-user "Mickey" "Mouse")
+(defn get-req-param
+  "Get string parameter from ring request"
+  [req param]
+  (get (:params req) param))
 
 (defn get-users-handler
   "Get users request handler"
-  [req]
+  [_]
   {:status 200
    :headers {"Content-Type" "text/json"}
-   :body    (str (json/write-str @users-collection))})
+   :body    (str (json/write-str user-srv/get-users))})
 
 (defn add-user-handler
   "Add user request handler"
   [req]
   {:status 200
    :headers {"Content-Type" "text/json"}
-   :body    (-> (
+   :body    (-> (let [p (partial get-req-param req)]
+                  (str (json/write-str (user-srv/add-user (p :firstname) (p :surname))))))})
 
-                  ))})
-
-(defn simple-body-page [req]
-  {:status  200
-   :headers {"Content-Type" "text/html"}
-   :body    "Hello World"})
 
 (defn request-example
   "Example request controller"
