@@ -8,7 +8,7 @@
                                 :surname (str/capitalize surname)}))
 
 (defn get-users []
-  (@users-collection))
+  @users-collection)
 
 (add-user "Functional" "Humnan")
 (add-user "Mickey" "Mouse")

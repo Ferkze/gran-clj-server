@@ -13,7 +13,7 @@
   [_]
   {:status 200
    :headers {"Content-Type" "text/json"}
-   :body    (str (json/write-str user-srv/get-users))})
+   :body    (str (json/write-str (user-srv/get-users)))})
 
 (defn add-user-handler
   "Add user request handler"
